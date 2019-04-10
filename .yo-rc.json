@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.7.1",
+    "libraryName": "people-directory",
+    "libraryId": "732caf16-d6ca-44f6-ab53-33d769ec0277",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}
