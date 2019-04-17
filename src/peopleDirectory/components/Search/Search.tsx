@@ -8,7 +8,9 @@ import * as strings from 'PeopleDirectoryWebPartStrings';
 
 export class Search extends React.Component<ISearchProps, {}> {
   private _handleSearch = (searchQuery: string): void => {
-    this.props.onSearch(searchQuery);
+    if(searchQuery.length >= 2){
+      this.props.onSearch(searchQuery);
+    }
   }
 
   private _handleClear = (): void => {
@@ -20,7 +22,7 @@ export class Search extends React.Component<ISearchProps, {}> {
       <div className={styles.search}>
         <SearchBox
           placeholder={strings.SearchBoxPlaceholder}
-          onSearch={this._handleSearch}
+          onChange={this._handleSearch}
           onClear={this._handleClear}
           value={this.props.searchQuery}
           className={styles.searchBox}

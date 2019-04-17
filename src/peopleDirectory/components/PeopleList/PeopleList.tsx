@@ -44,6 +44,7 @@ export class PeopleList extends React.Component<IPeopleListProps, IPeopleListSta
             const phone: string = p.phone && p.mobile ? `${p.phone}/${p.mobile}`: p.phone ? p.phone: p.mobile;
             // const toggleClassName: string = this.state.toggleClass ? `ms-Icon--ChromeClose ${styles.isClose}` : "ms-Icon--ContactInfo";
             return (
+              p.name.indexOf('ZZ_') === -1 && p.name.indexOf('Admin_') === -1  ?
               <div className={styles.persona_card}>
                 <Persona primaryText={p.name} secondaryText={p.email} tertiaryText={phone} imageUrl={p.photoUrl} imageAlt={p.name} size={PersonaSize.size72} />
                 <div id={`callout${i}`} onClick={this._onPersonaClicked(i, p)} className={styles.persona}>
@@ -64,7 +65,7 @@ export class PeopleList extends React.Component<IPeopleListProps, IPeopleListSta
                   <PeopleCallout person={this.state.person}></PeopleCallout>
                 </Callout>
                 )}
-              </div>
+              </div> : ''
             );
           })
         }
