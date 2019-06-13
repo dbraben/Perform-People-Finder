@@ -28,7 +28,7 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
     this.state = {
       loading: false,
       errorMessage: null,
-      selectedIndex: '_________',
+      selectedIndex: '______/',
       searchQuery: '',
       people: []
     };
@@ -41,10 +41,10 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
       selectedIndex: index,
       searchQuery: ''
     },
-    function() {
-      // load information about people matching the selected tab
-      this._loadPeopleInfo(index, null);
-    });
+      function () {
+        // load information about people matching the selected tab
+        this._loadPeopleInfo(index, null);
+      });
 
   }
 
@@ -55,23 +55,23 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
       selectedIndex: 'Search',
       searchQuery: searchQuery
     },
-    function() {
-      // load information about people matching the specified search query
-      this._loadPeopleInfo(null, searchQuery);
-    });
+      function () {
+        // load information about people matching the specified search query
+        this._loadPeopleInfo(null, searchQuery);
+      });
 
   }
 
   private _handleSearchClear = (): void => {
     // activate the A tab in the navigation and clear the previous search query
     this.setState({
-      selectedIndex: '_________',
+      selectedIndex: '______/',
       searchQuery: ''
     },
-    function() {
-      // load information about people whose last name begins with A
-      this._loadPeopleInfo('_________', null);
-    });
+      function () {
+        // load information about people whose last name begins with A
+        this._loadPeopleInfo('______/', null);
+      });
   }
 
   /**
@@ -100,7 +100,7 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
     // retrieve information about people using SharePoint People Search
     // sort results ascending by the last name
     this.props.spHttpClient
-      .get(`${this.props.webUrl}/_api/search/query?querytext='${query}'&selectproperties='FirstName,LastName,PreferredName,WorkEmail,PictureURL,WorkPhone,MobilePhone,JobTitle,Department,Skills,PastProjects'&sortlist='LastName:ascending'&sourceid='b09a7990-05ea-4af9-81ef-edfab16c4e31'&rowlimit=500`, SPHttpClient.configurations.v1, {
+      .get(`${this.props.webUrl}/_api/search/query?querytext='(LastName:${query})+OR+((FirstName:${query})OR+(PreferredName:${query}))+OR+(Skills:${query})+OR+(JobTitle:${query})+OR+(PastProjects:${query})'&selectproperties='FirstName,LastName,PreferredName,WorkEmail,PictureURL,WorkPhone,MobilePhone,JobTitle,Department,Skills,PastProjects'&sortlist='LastName:ascending'&sourceid='b09a7990-05ea-4af9-81ef-edfab16c4e31'&rowlimit=500&tartrow=501`, SPHttpClient.configurations.v1, {
         headers: headers
       })
       .then((res: SPHttpClientResponse): Promise<IPeopleSearchResults> => {
@@ -125,22 +125,51 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
           });
           return;
         }
+       console.log(res.PrimaryQueryResult.RelevantResults.Table.Rows);
+       // convert the SharePoint People Search results to an array of people
+       // filter out specific domains i.e. dazn, hotmail etc based upon the email value
+       let peopleFiltered = res.PrimaryQueryResult.RelevantResults.Table.Rows.filter(elem => elem.Cells ? elem.Cells[10].Value !== null  : '');
+       peopleFiltered = peopleFiltered.filter(elem => elem.Cells ? (elem.Cells[10].Value.indexOf('10-P') >= 0): '');
+       
+       
+      // let peopleListRes = res.PrimaryQueryResult.RelevantResults.Table.Rows;
 
-        // convert the SharePoint People Search results to an array of people
-        let people: IPerson[] = res.PrimaryQueryResult.RelevantResults.Table.Rows.map(r => {
-          return {
-            name: this._getValueFromSearchResult('PreferredName', r.Cells),
-            firstName: this._getValueFromSearchResult('FirstName', r.Cells),
-            lastName: this._getValueFromSearchResult('LastName', r.Cells),
-            phone: this._getValueFromSearchResult('WorkPhone', r.Cells),
-            mobile: this._getValueFromSearchResult('MobilePhone', r.Cells),
-            email: this._getValueFromSearchResult('WorkEmail', r.Cells),
-            photoUrl: this._getValueFromSearchResult('PictureURL', r.Cells),
-            function: this._getValueFromSearchResult('JobTitle', r.Cells),
-            department: this._getValueFromSearchResult('Department', r.Cells),
-            skills: this._getValueFromSearchResult('Skills', r.Cells),
-            projects: this._getValueFromSearchResult('PastProjects', r.Cells)
-          };
+       //let peopleListMap = ['dazn', 'hotmail','sportingnews'];
+       //let peopleRes = peopleListMap.filter((elem, key) => peopleListRes[key].Cells[5].Value.indexOf(elem) === -1 ? peopleListRes[key] : '');
+       //var res = arr.map((key) => obj[key]
+
+       if (peopleFiltered.length === 0) {
+        // No results were found. Notify the user that loading data is finished
+        this.setState({
+          loading: false
+        });
+        return;
+      }
+
+       if (peopleFiltered.length === 0) {
+        // No results were found. Notify the user that loading data is finished
+        this.setState({
+          loading: false
+        });
+        return;
+      }
+
+       //let people: IPerson[] = res.PrimaryQueryResult.RelevantResults.Table.Rows.map(r => {
+       let people: IPerson[] = peopleFiltered.map(r => {
+           // let emailVal: string = r.Cells[5].Value;
+             return {
+             name: this._getValueFromSearchResult('PreferredName', r.Cells),
+             firstName: this._getValueFromSearchResult('FirstName', r.Cells),
+             lastName: this._getValueFromSearchResult('LastName', r.Cells),
+             phone: this._getValueFromSearchResult('WorkPhone', r.Cells),
+             mobile: this._getValueFromSearchResult('MobilePhone', r.Cells),
+             email: this._getValueFromSearchResult('WorkEmail', r.Cells),
+             photoUrl: `${this.props.webUrl}${"/_layouts/15/userphoto.aspx?size=L&accountname=" + this._getValueFromSearchResult('WorkEmail', r.Cells)}`,
+             function: this._getValueFromSearchResult('JobTitle', r.Cells),
+             department: this._getValueFromSearchResult('Department', r.Cells),
+             skills: this._getValueFromSearchResult('Skills', r.Cells),
+             projects: this._getValueFromSearchResult('PastProjects', r.Cells)
+          };  
         });
 
         const selectedIndex = this.state.selectedIndex;

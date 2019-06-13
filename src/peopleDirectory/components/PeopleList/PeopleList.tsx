@@ -42,11 +42,9 @@ export class PeopleList extends React.Component<IPeopleListProps, IPeopleListSta
           //this.props.people.map(p => <Persona primaryText={p.name} secondaryText={p.email} tertiaryText={p.phone} imageUrl={p.photoUrl} imageAlt={p.name} size={PersonaSize.size72} />)
           this.props.people.map((p,i) => {
             const phone: string = p.phone && p.mobile ? `${p.phone}/${p.mobile}`: p.phone ? p.phone: p.mobile;
-            // const toggleClassName: string = this.state.toggleClass ? `ms-Icon--ChromeClose ${styles.isClose}` : "ms-Icon--ContactInfo";
             return (
-              p.name.indexOf('ZZ_') === -1 && p.name.indexOf('Admin_') === -1  ?
               <div className={styles.persona_card}>
-                <Persona primaryText={p.name} secondaryText={p.email} tertiaryText={phone} imageUrl={p.photoUrl} imageAlt={p.name} size={PersonaSize.size72} />
+                <Persona primaryText={p.name} secondaryText={p.function} tertiaryText={p.department} optionalText={p.email} imageUrl={p.photoUrl} imageAlt={p.name} size={PersonaSize.size100} />
                 <div id={`callout${i}`} onClick={this._onPersonaClicked(i, p)} className={styles.persona}>
                   <i className="ms-Icon ms-Icon--ContactInfo" aria-hidden="true"></i>
                 </div>
@@ -65,7 +63,7 @@ export class PeopleList extends React.Component<IPeopleListProps, IPeopleListSta
                   <PeopleCallout person={this.state.person}></PeopleCallout>
                 </Callout>
                 )}
-              </div> : ''
+              </div> //: ''
             );
           })
         }
