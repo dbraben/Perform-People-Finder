@@ -11,26 +11,57 @@ import { IPeopleListState } from './IPeopleListState';
 import { PeopleCallout } from '../PeopleCallout';
 
 export class PeopleList extends React.Component<IPeopleListProps, IPeopleListState> {
+  public wrapperRef;
   constructor(props: IPeopleListProps) {
     super(props);
 
     this.state = {
       showCallOut: false,
       calloutElement: null,
-      person: null
+      person: null,
+      show: true
     };
 
     //this._onPersonaClicked = this._onPersonaClicked.bind(this);
     this._onCalloutDismiss = this._onCalloutDismiss.bind(this);
+    // this.wrapperRef= React.createRef();
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  public componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  /**
+   * Set the wrapper ref
+   */
+  public setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  /**
+   * Alert if clicked on outside of element
+   */
+  public handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target) && this.props.people.length > 0) {
+      this.setState({
+        show: false
+      });
+    }
   }
 
   public render(): React.ReactElement<IPeopleListProps> {
     return (
-      <div>
+      <div ref={this.setWrapperRef} id='dropper' className={(this.state.show === true ?  styles.people_list :  styles.people_list_hide)}>
         {this.props.people.length === 0 &&
           (this.props.selectedIndex !== 'Search' ||
             (this.props.selectedIndex === 'Search' &&
-              this.props.hasSearchQuery)) &&
+              this.props.hasSearchQuery && this.state.show === true)) &&
               // Show the 'No people found' message if no people have been retrieved
               // and the user either selected a letter in the navigation or issued
               // a search query (but not when navigated to the Search tab without
@@ -70,6 +101,7 @@ export class PeopleList extends React.Component<IPeopleListProps, IPeopleListSta
       </div>
     );
   }
+  
 
   private _onPersonaClicked = (index, person) => event => {
     this.setState({

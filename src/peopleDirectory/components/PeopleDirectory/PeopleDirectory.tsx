@@ -128,8 +128,9 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
        console.log(res.PrimaryQueryResult.RelevantResults.Table.Rows);
        // convert the SharePoint People Search results to an array of people
        // filter out specific domains i.e. dazn, hotmail etc based upon the email value
-       let peopleFiltered = res.PrimaryQueryResult.RelevantResults.Table.Rows.filter(elem => elem.Cells ? elem.Cells[10].Value !== null  : '');
-       peopleFiltered = peopleFiltered.filter(elem => elem.Cells ? (elem.Cells[10].Value.indexOf('10-P') >= 0): '');
+       let peopleFiltered = res.PrimaryQueryResult.RelevantResults.Table.Rows;
+       //.filter(elem => elem.Cells ? elem.Cells[3].Value !== null  : '');
+       //peopleFiltered = peopleFiltered.filter(elem => elem.Cells ? (elem.Cells[10].Value.indexOf('10-P') >= 0): '');
        
        
       // let peopleListRes = res.PrimaryQueryResult.RelevantResults.Table.Rows;
@@ -274,7 +275,9 @@ export class PeopleDirectory extends React.Component<IPeopleDirectoryProps, IPeo
           <PeopleList
             selectedIndex={selectedIndex}
             hasSearchQuery={searchQuery !== ''}
-            people={people} />
+            people={people} 
+            show={true}
+            />
         }
       </div>
     );

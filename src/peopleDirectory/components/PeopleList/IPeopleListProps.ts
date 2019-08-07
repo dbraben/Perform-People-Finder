@@ -16,4 +16,8 @@ export interface IPeopleListProps {
    * True if the user is searching for people
    */
   hasSearchQuery: boolean;
+  /**
+   * True if the user is clicking within the list
+   */
+  show: boolean;
 }

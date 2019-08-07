@@ -4,6 +4,8 @@
   "alias": "PeopleDirectoryWebPart",
   "componentType": "WebPart",
 
+  "supportsThemeVariants": true,
+
   // The "*" signifies that the version should be taken from the package.json
   "version": "*",
   "manifestVersion": 2,
@@ -15,12 +17,12 @@
 
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Other
-    "group": { "default": "Perform" },
-    "title": { "default": "Perform People Finder" },
+    "group": { "default": "Stats Perform" },
+    "title": { "default": "Stats Perform People Finder" },
     "description": { "default": "A people finder app" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "Perform People Finder"
+      "description": "Stats Perform People Finder"
     }
   }]
 }

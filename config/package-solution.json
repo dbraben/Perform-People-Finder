@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "perform-people-directory",
+    "name": "stats-perform-people-directory",
     "id": "732caf16-d6ca-44f6-ab53-33d769ec0277",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,

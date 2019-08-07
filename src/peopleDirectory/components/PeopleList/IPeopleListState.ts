@@ -4,4 +4,5 @@ export interface IPeopleListState {
   showCallOut: boolean;
   calloutElement: number;
   person: IPerson;
+  show: boolean;
 }

@@ -3,7 +3,7 @@ define([], function() {
     "SearchButtonText": "Search",
     "LoadingSpinnerLabel": "",
     "NoPeopleFoundLabel": "No people found",
-    "SearchBoxPlaceholder": "Find Perform people ",
+    "SearchBoxPlaceholder": "Find Stats Perform colleaguesgulp ",
     "Error": "Error",
     "SkillsLabel": "Skills",
     "ProjectsLabel": "Projects",
