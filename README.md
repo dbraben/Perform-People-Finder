@@ -19,6 +19,7 @@ This package produces the following:
 
 ### Build options
 ```bash
+nvm use 8.9.4
 gulp clean
 gulp test
 gulp serve

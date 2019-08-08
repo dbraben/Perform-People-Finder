@@ -2,8 +2,8 @@ define([], function() {
   return {
     "SearchButtonText": "Search",
     "LoadingSpinnerLabel": "",
-    "NoPeopleFoundLabel": "No people found",
-    "SearchBoxPlaceholder": "Find Stats Perform colleaguesgulp ",
+    "NoPeopleFoundLabel": "No matching colleague found",
+    "SearchBoxPlaceholder": "Find colleagues",
     "Error": "Error",
     "SkillsLabel": "Skills",
     "ProjectsLabel": "Projects",
